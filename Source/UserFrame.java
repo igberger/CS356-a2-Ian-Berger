@@ -1,16 +1,11 @@
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
-import javax.management.ListenerNotFoundException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JTextField;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
 import javax.swing.JTextArea;
-import javax.swing.WindowConstants;
 
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
@@ -18,7 +13,9 @@ import java.awt.event.MouseEvent;
 import java.util.Observable;
 import java.util.Observer;
 
-
+//Ian Berger
+//CS 356
+//Assignment 2
 public class UserFrame extends JFrame implements Observer {
 
 	private User user;
@@ -58,7 +55,7 @@ public class UserFrame extends JFrame implements Observer {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		//TODO 
+		//Follow user with user id in txtrUserId when btnFollowUser is clicked 
 		JButton btnFollowUser = new JButton("Follow User");
 		btnFollowUser.addMouseListener(new MouseAdapter() {
 			@Override
@@ -69,7 +66,7 @@ public class UserFrame extends JFrame implements Observer {
 					user.follow(v.getUser());
 					listFollowing.updateUI();
 				} else {
-					//TODO Tell user to enter a valid user ID
+					JOptionPane.showMessageDialog(null, "Enter an existing user ID");
 				}
 			}
 		});
@@ -87,7 +84,7 @@ public class UserFrame extends JFrame implements Observer {
 		txtrCurrentlyFollowing.setFont(new Font("Lucida Grande", Font.BOLD, 13));
 		txtrCurrentlyFollowing.setText("Currently Following");
 		scrollPane.setColumnHeaderView(txtrCurrentlyFollowing);
-		//TODO 
+		//Tweet message in txtrTweetMessage when btnPostTweet is clicked 
 		JButton btnPostTweet = new JButton("Post Tweet");
 		btnPostTweet.addMouseListener(new MouseAdapter() {
 			@Override

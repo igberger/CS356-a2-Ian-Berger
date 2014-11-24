@@ -1,4 +1,6 @@
-
+//Ian Berger
+//CS 356
+//Assignment 2
 public class GetUserVisitor implements UserGroupVisitor {
 	private String id;
 	private User user;

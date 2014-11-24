@@ -1,4 +1,6 @@
-
+//Ian Berger
+//CS 356
+//Assignment 2
 public class GetGroupVisitor implements UserGroupVisitor {
 	private String id;
 	private Group group;
@@ -27,6 +29,7 @@ public class GetGroupVisitor implements UserGroupVisitor {
 	public void visitGroup(Group group) {
 		if(group.toString().equals(id)) {
 			this.group = group;
+			hasGroup = true;
 		}
 	}
 

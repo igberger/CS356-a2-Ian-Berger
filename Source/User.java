@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -49,7 +48,10 @@ public class User extends Observable implements Observer, UserGroupComponent{
 	}
 	
 	public void follow(User user) {
-		user.addObserver(this);
-		currentlyFollowing.addElement(user);
+		//Only follow user if they are not already being followed
+		if(!currentlyFollowing.contains(user)) {
+			user.addObserver(this);
+			currentlyFollowing.addElement(user);
+		}
 	}
 }

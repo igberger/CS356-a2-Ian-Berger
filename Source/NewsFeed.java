@@ -2,7 +2,9 @@ import java.util.Observable;
 
 import javax.swing.DefaultListModel;
 
-
+//Ian Berger
+//CS 356
+//Assignment 2
 public class NewsFeed extends Observable {
 	private DefaultListModel<Tweet> newsFeed;
 	
