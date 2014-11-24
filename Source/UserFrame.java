@@ -1,0 +1,129 @@
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.management.ListenerNotFoundException;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.JScrollPane;
+import javax.swing.JList;
+import javax.swing.JTextArea;
+import javax.swing.WindowConstants;
+
+import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Observable;
+import java.util.Observer;
+
+
+public class UserFrame extends JFrame implements Observer {
+
+	private User user;
+	private Group root;
+	private JPanel contentPane;
+	private JTextArea txtrUserId;
+	private JTextArea txtrTweetMessage;
+	private JList listFollowing;
+	private JList listNewsFeed;
+
+	/**
+	 * Launch the application.
+	 */
+	/*public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					UserFrame frame = new UserFrame();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}*/
+
+	/**
+	 * Create the frame.
+	 */
+	public UserFrame(User u, Group r) {
+		user = u;
+		root = r;
+		//Get notified whenever a new tweet appears in user's news feed
+		user.getNewsFeed().addObserver(this);	
+		setBounds(100, 100, 450, 300);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		//TODO 
+		JButton btnFollowUser = new JButton("Follow User");
+		btnFollowUser.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				GetUserVisitor v = new GetUserVisitor(txtrUserId.getText());
+				root.accept(v);
+				if(v.hasUser()) {
+					user.follow(v.getUser());
+					listFollowing.updateUI();
+				} else {
+					//TODO Tell user to enter a valid user ID
+				}
+			}
+		});
+		btnFollowUser.setBounds(327, 6, 117, 29);
+		contentPane.add(btnFollowUser);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(6, 40, 438, 66);
+		contentPane.add(scrollPane);
+		
+		listFollowing = new JList(user.getCurrentlyFollowingListModel());
+		scrollPane.setViewportView(listFollowing);
+		
+		JTextArea txtrCurrentlyFollowing = new JTextArea();
+		txtrCurrentlyFollowing.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		txtrCurrentlyFollowing.setText("Currently Following");
+		scrollPane.setColumnHeaderView(txtrCurrentlyFollowing);
+		//TODO 
+		JButton btnPostTweet = new JButton("Post Tweet");
+		btnPostTweet.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				user.tweet(txtrTweetMessage.getText());
+			}
+		});
+		btnPostTweet.setBounds(327, 118, 117, 29);
+		contentPane.add(btnPostTweet);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(6, 152, 434, 116);
+		contentPane.add(scrollPane_1);
+		
+		listNewsFeed = new JList(user.getNewsFeed().getListModel());
+		scrollPane_1.setViewportView(listNewsFeed);
+		
+		JTextArea txtrNewsFeed = new JTextArea();
+		txtrNewsFeed.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		txtrNewsFeed.setText("News Feed");
+		scrollPane_1.setColumnHeaderView(txtrNewsFeed);
+		
+		txtrUserId = new JTextArea();
+		txtrUserId.setText("User ID");
+		txtrUserId.setBounds(6, 6, 309, 29);
+		contentPane.add(txtrUserId);
+		
+		txtrTweetMessage = new JTextArea();
+		txtrTweetMessage.setText("Tweet Message");
+		txtrTweetMessage.setBounds(6, 118, 309, 29);
+		contentPane.add(txtrTweetMessage);
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		//update listNewsFeed whenever user's newsFeed is changed
+		listNewsFeed.updateUI();
+	}
+}

@@ -1,0 +1,55 @@
+import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
+
+import javax.swing.DefaultListModel;
+
+//Ian Berger
+//CS 356
+//Assignment 2
+public class User extends Observable implements Observer, UserGroupComponent{
+	private String id;
+	private NewsFeed newsFeed;
+	private DefaultListModel<User> currentlyFollowing;
+	
+	public User(String id) {
+		this.id = id;
+		newsFeed = new NewsFeed();
+		currentlyFollowing = new DefaultListModel<User>();
+		follow(this);//Set user as a follower of themselves
+	}
+	
+	public String toString() {
+		return id;
+	}
+	
+	public NewsFeed getNewsFeed() {
+		return newsFeed;
+	}
+	
+	public DefaultListModel<User> getCurrentlyFollowingListModel() {
+		return currentlyFollowing;
+	}
+	
+	//arg is of type Tweet
+	@Override
+	public void update(Observable o, Object arg) {
+		newsFeed.add((Tweet)arg);
+	}
+	
+	@Override
+	public void accept(UserGroupVisitor visitor) {
+		//Send visitor to this User
+		visitor.visitUser(this);
+	}
+	
+	public void tweet(String message) {
+		setChanged();
+		notifyObservers(new Tweet(this, message));
+	}
+	
+	public void follow(User user) {
+		user.addObserver(this);
+		currentlyFollowing.addElement(user);
+	}
+}
